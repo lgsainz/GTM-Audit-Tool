@@ -13,7 +13,7 @@ account_to_audit = ''
 
 def site_login():
     driver.get(url)
-    driver.implicitly_wait(10) # this sets the default wait time for the rest of the WebDriver obect's life
+    driver.implicitly_wait(10) # sets the default wait time for the rest of the WebDriver obect's life
 
     driver.find_element_by_id('identifierId').send_keys(username)
     driver.find_element_by_id('identifierNext').click()
@@ -30,14 +30,10 @@ def get_tags():
     # click into Tags from side menu
     driver.find_element_by_class_name('open-tag-list-button').click()
 
-    # find table of tags in DOM
-    # tags_table = driver.find_element_by_class_name('gtm-multiselect-table')
-    # print('found table')
-    # for row in driver.find_elements_by_css_selector('tr.wd-tag-row'):
-    #     print(row.text) #print text in row
-
-    print(driver.find_elements_by_css_selector('a.open-tag-button')[0].text)
-    # print(driver.find_elements_by_css_selector('tr.wd-tag-row')[0].text)
+    # find tag names within table data
+    # print(driver.find_elements_by_css_selector('a.open-tag-button')[0].text)
+    for row in driver.find_elements_by_css_selector('a.open-tag-button'):
+        print(row.text)
 
 
 site_login()
