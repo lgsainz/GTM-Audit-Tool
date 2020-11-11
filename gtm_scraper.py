@@ -30,6 +30,15 @@ def get_tags():
     # click into Tags from side menu
     driver.find_element_by_class_name('open-tag-list-button').click()
 
+    # find table of tags in DOM
+    # tags_table = driver.find_element_by_class_name('gtm-multiselect-table')
+    # print('found table')
+    # for row in driver.find_elements_by_css_selector('tr.wd-tag-row'):
+    #     print(row.text) #print text in row
+
+    print(driver.find_elements_by_css_selector('a.open-tag-button')[0].text)
+    # print(driver.find_elements_by_css_selector('tr.wd-tag-row')[0].text)
+
 
 site_login()
 get_tags()
