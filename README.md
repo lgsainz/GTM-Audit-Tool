@@ -40,6 +40,17 @@ Check what version of Chrome you currently have. Download the corresponding webd
 
 ## Running the code
 
+You will need to create a config.py file to include credentials and account information. The contents of this file should look as follows:
+
+```python
+username = ''
+password = ''
+url = ''
+account_to_audit = ''
+```
+
+When your ready, run the program:
+
 ```
 python gtm_scraper.py
 ```
