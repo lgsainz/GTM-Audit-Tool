@@ -34,9 +34,24 @@ def get_tags():
     for row in driver.find_elements_by_css_selector('tr.wd-tag-row'):
         tag_name = row.find_element_by_css_selector('a.open-tag-button')
         trigger = row.find_element_by_css_selector('a.small-trigger-chip')
+        tag_type = row.find_element_by_xpath(".//td[3]")
+
         # print(tag_name.text)
-        f1.write(tag_name.text + ',' + ' ,' + ' ,' + ' ,' + trigger.text + '\n')
         # print(trigger.text)
+        print(tag_type.text)
+        
+        # Check if the current tag is a GA tag
+        if tag_type.text == 'Google Analytics: Universal Analytics':
+            print('yes')
+            # if it is, then click into it and get category, action, label text
+            # driver.find_element_by_css_selector('a.open-tag-button').click()
+            # driver.find_element_by_css_selector('gtm-veditor-section-overlay').click()
+        else:
+            print('no')    
+        
+
+        # write values for each column to csv file
+        # f1.write(tag_name.text + ',' + ' ,' + ' ,' + ' ,' + trigger.text + '\n')
     f1.close()
         
 # create csv files
