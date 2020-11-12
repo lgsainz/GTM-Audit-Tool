@@ -3,6 +3,7 @@ import time
 from selenium import webdriver
 import pandas as pd
 import config
+import os
 
 driver = webdriver.Chrome('/Users/Shared/chromedriver')
 
@@ -22,13 +23,31 @@ def get_account():
 
 def get_tags():
     get_account()     
+    f1 = create_csvs()
     # click into Tags from side menu
     driver.find_element_by_class_name('open-tag-list-button').click()
 
-    # find tag names within table data
-    # print(driver.find_elements_by_css_selector('a.open-tag-button')[0].text)
-    for row in driver.find_elements_by_css_selector('a.open-tag-button'):
-        print(row.text)
+    # create a dataframe with col names
+    # put the tag names in first col
+    # go one by one -> scrape tag name, click into it, scrape category, action, label
+
+    for row in driver.find_elements_by_css_selector('tr.wd-tag-row'):
+        tag_name = row.find_element_by_css_selector('a.open-tag-button')
+        trigger = row.find_element_by_css_selector('a.small-trigger-chip')
+        # print(tag_name.text)
+        f1.write(tag_name.text + ',' + ' ,' + ' ,' + ' ,' + trigger.text + '\n')
+        # print(trigger.text)
+    f1.close()
+        
+# create csv files
+def create_csvs():
+    if not os.path.exists('csv'):
+        os.mkdir('csv')
+    filename = f'csv/{config.account_to_audit}.csv'
+    f1 = open(filename, 'w')
+    headers = 'tag, trigger, category, action, label\n'
+    f1.write(headers)
+    return f1
 
 
 site_login()

@@ -1,6 +1,7 @@
 #General
 .DS_Store
 config.py
+config.pyc
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
