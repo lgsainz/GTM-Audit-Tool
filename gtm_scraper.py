@@ -48,12 +48,11 @@ def get_tags():
 
             # print(category, action, label)
             driver.find_element_by_class_name('gtm-sheet-header__close').click() # click back to tags view
-
-        else:
-            continue  
         
         # write values for each column to csv file
         f1.write(tag_name.text + ',' + category + ',' + action + ',' + label + ',' + trigger.text + '\n')
+        time.sleep(0.5) # to prevent skipping tags
+        
     f1.close()
         
 # create csv files
