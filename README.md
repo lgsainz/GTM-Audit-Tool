@@ -14,19 +14,13 @@ What you need:
 
 * Python 3.x (and pip)
 * Chromedriver
-* Google Chrome (you can use another browser)
+* Google Chrome
 
 ## Installing
 
-A step by step series of examples that tell you how to get a development env running
+How to get a development env running
 
-### Install the following Python libraries:
-
- * **requests2** - Requests is the only Non-GMO HTTP library for Python, safe for human consumption;
- * **pandas** - A great Python Data Analysis Library;
- * **lxml** - Library for processing XML and HTML;
- * **beautfulsoup4** - Library for pulling data out of HTML and XML files;
- * **selenium** - An API to write functional/acceptance tests using Selenium WebDriver.
+### Install Selenium and additional python libraries
 
 With:
 ```
@@ -36,6 +30,7 @@ pip install -r requirements.txt
 ### Chromedriver 
 
 Check what version of Chrome you currently have. Download the corresponding webdriver (https://chromedriver.chromium.org/downloads/version-selection).
+Once you've installed chromedriver, move it to /Users/Shared/chromedriver. This isn't mandatory - if you want to place it elsewhere, make sure to modify Line 7 in the code, to fit your current path.
 
 
 ## Running the code
