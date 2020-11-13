@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import time
 from selenium import webdriver
+from bs4 import BeautifulSoup
 import pandas as pd
 import config
 import os
@@ -13,7 +14,7 @@ def site_login():
 
     driver.find_element_by_id('identifierId').send_keys(config.username)
     driver.find_element_by_id('identifierNext').click()
-    driver.find_element_by_class_name('vxx8jf').click()
+    driver.find_element_by_class_name('vxx8jf').click() # select workspace button (check: is this always a step?)
     driver.find_element_by_name('password').send_keys(config.password)
     driver.find_element_by_id('passwordNext').click()
 
@@ -24,34 +25,35 @@ def get_account():
 def get_tags():
     get_account()     
     f1 = create_csvs()
+
     # click into Tags from side menu
     driver.find_element_by_class_name('open-tag-list-button').click()
-
-    # create a dataframe with col names
-    # put the tag names in first col
-    # go one by one -> scrape tag name, click into it, scrape category, action, label
 
     for row in driver.find_elements_by_css_selector('tr.wd-tag-row'):
         tag_name = row.find_element_by_css_selector('a.open-tag-button')
         trigger = row.find_element_by_css_selector('a.small-trigger-chip')
         tag_type = row.find_element_by_xpath(".//td[3]")
+        category, action, label = '', '', ''
 
-        # print(tag_name.text)
-        # print(trigger.text)
-        print(tag_type.text)
-        
         # Check if the current tag is a GA tag
         if tag_type.text == 'Google Analytics: Universal Analytics':
-            print('yes')
-            # if it is, then click into it and get category, action, label text
-            # driver.find_element_by_css_selector('a.open-tag-button').click()
-            # driver.find_element_by_css_selector('gtm-veditor-section-overlay').click()
-        else:
-            print('no')    
-        
+            # if so, click into tag and get category, action, label text
+            tag_name.click()
+            driver.find_element_by_class_name('gtm-veditor-section-overlay').click() # click into overlay
 
+            # get category, action, label (input text fields 1,2,3)
+            category = (driver.find_element_by_xpath(".//gtm-vendor-template-text[1]//input")).get_attribute('value')
+            action = (driver.find_element_by_xpath(".//gtm-vendor-template-text[2]//input")).get_attribute('value')
+            label = (driver.find_element_by_xpath(".//gtm-vendor-template-text[3]//input")).get_attribute('value')
+
+            # print(category, action, label)
+            driver.find_element_by_class_name('gtm-sheet-header__close').click() # click back to tags view
+
+        else:
+            continue  
+        
         # write values for each column to csv file
-        # f1.write(tag_name.text + ',' + ' ,' + ' ,' + ' ,' + trigger.text + '\n')
+        f1.write(tag_name.text + ',' + category + ',' + action + ',' + label + ',' + trigger.text + '\n')
     f1.close()
         
 # create csv files
@@ -60,11 +62,11 @@ def create_csvs():
         os.mkdir('csv')
     filename = f'csv/{config.account_to_audit}.csv'
     f1 = open(filename, 'w')
-    headers = 'tag, trigger, category, action, label\n'
+    headers = 'tag, category, action, label, trigger\n'
     f1.write(headers)
     return f1
 
-
+# execute program
 site_login()
 get_tags()
-# driver.quit()
+driver.quit()

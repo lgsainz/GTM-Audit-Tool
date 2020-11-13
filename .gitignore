@@ -1,7 +1,10 @@
 #General
 .DS_Store
 config.py
-config.pyc
+*.pyc
+.vscode
+*.csv
+fyi.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
