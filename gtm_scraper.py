@@ -44,7 +44,6 @@ def get_tags():
             action = (driver.find_element_by_xpath(".//gtm-vendor-template-text[2]//input")).get_attribute('value')
             label = (driver.find_element_by_xpath(".//gtm-vendor-template-text[3]//input")).get_attribute('value')
 
-            # print(category, action, label)
             driver.find_element_by_class_name('gtm-sheet-header__close').click() # click back to tags view
         
         # write values for each column to csv file
