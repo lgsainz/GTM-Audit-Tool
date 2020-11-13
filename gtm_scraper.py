@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 import time
 from selenium import webdriver
-from bs4 import BeautifulSoup
-import pandas as pd
 import config
 import os
 
@@ -52,7 +50,7 @@ def get_tags():
         # write values for each column to csv file
         f1.write(tag_name.text + ',' + category + ',' + action + ',' + label + ',' + trigger.text + '\n')
         time.sleep(0.5) # to prevent skipping tags
-        
+
     f1.close()
         
 # create csv files
