@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 import time
 from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 import config
 import os
 
@@ -8,20 +11,26 @@ driver = webdriver.Chrome('/Users/Shared/chromedriver')
 
 def site_login():
     driver.get(config.url)
-    driver.implicitly_wait(10) # sets the default wait time for the rest of the WebDriver obect's life
+    driver.implicitly_wait(5) # sets the default wait time for the rest of the WebDriver obect's life
 
     driver.find_element_by_id('identifierId').send_keys(config.username)
     driver.find_element_by_id('identifierNext').click()
-    driver.find_element_by_class_name('vxx8jf').click() # select workspace button (check: is this always a step?)
-    driver.find_element_by_name('password').send_keys(config.password)
-    driver.find_element_by_id('passwordNext').click()
+    # check if current login screen is workspace selection or password
+    try:
+        driver.find_element_by_class_name('vxx8jf').click() # select workspace button
+    except:
+        print('cool')
+    finally:
+        driver.find_element_by_name('password').send_keys(config.password)
+        driver.find_element_by_id('passwordNext').click()
 
 def get_account():
+    site_login()
     # click into the account you want to audit
-    driver.find_element_by_link_text(config.account_to_audit).click()
+    (WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.LINK_TEXT, config.account_to_audit)))).click()
 
 def get_tags():
-    get_account()     
+    get_account()
     f1 = create_csvs()
 
     # click into Tags from side menu
@@ -51,6 +60,7 @@ def get_tags():
         time.sleep(0.5) # to prevent skipping tags
 
     f1.close()
+    driver.quit()
         
 # create csv files
 def create_csvs():
@@ -63,6 +73,4 @@ def create_csvs():
     return f1
 
 # execute program
-site_login()
 get_tags()
-driver.quit()
