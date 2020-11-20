@@ -19,7 +19,7 @@ def site_login():
     try:
         driver.find_element_by_class_name('vxx8jf').click() # select workspace button
     except:
-        print('cool')
+        print('logging  in...')
     finally:
         driver.find_element_by_name('password').send_keys(config.password)
         driver.find_element_by_id('passwordNext').click()
@@ -73,7 +73,11 @@ def write_tags(filename):
             driver.find_element_by_class_name('gtm-sheet-header__close').click() # click back to tags view
         
         # write values for each column to csv file
-        filename.write(tag_name.text + ',' + category + ',' + action + ',' + label + ',' + trigger.text + '\n')
+        f1.write(tag_name.text + ',' + category + ',' + action + ',' + label + ',' + trigger.text + '\n')
+        
+    f1.close()
+    driver.quit()
+
         
 
 # create csv files
