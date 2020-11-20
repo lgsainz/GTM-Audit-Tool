@@ -36,7 +36,12 @@ def get_tags():
     # click into Tags from side menu
     driver.find_element_by_class_name('open-tag-list-button').click()
 
-    for row in driver.find_elements_by_css_selector('tr.wd-tag-row'):
+    # wait for tag row to be visible
+    # tag_row = WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, 'tr.wd-tag-row')))
+    # WebDriverWait(driver, 10).until(lambda driver: driver.find_element_by_css_selector('tr.wd-tag-row').text.strip() != '')
+    
+    for row in WebDriverWait(driver, 10).until(EC.visibility_of_all_elements_located((By.CSS_SELECTOR, 'tr.wd-tag-row'))):
+        WebDriverWait(row, 10).until(lambda driver: row.find_element_by_css_selector('a.open-tag-button').text.strip() != '')
         tag_name = row.find_element_by_css_selector('a.open-tag-button')
         trigger = row.find_element_by_css_selector('a.small-trigger-chip')
         tag_type = row.find_element_by_xpath(".//td[3]")
@@ -46,7 +51,8 @@ def get_tags():
         if tag_type.text == 'Google Analytics: Universal Analytics':
             # if so, click into tag and get category, action, label text
             tag_name.click()
-            driver.find_element_by_class_name('gtm-veditor-section-overlay').click() # click into overlay
+            # click into overlay
+            (WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'gtm-veditor-section-overlay')))).click()
 
             # get category, action, label (input text fields 1,2,3)
             category = (driver.find_element_by_xpath(".//gtm-vendor-template-text[1]//input")).get_attribute('value')
@@ -57,10 +63,40 @@ def get_tags():
         
         # write values for each column to csv file
         f1.write(tag_name.text + ',' + category + ',' + action + ',' + label + ',' + trigger.text + '\n')
-        time.sleep(0.5) # to prevent skipping tags
+        # time.sleep(0.5) # to prevent skipping tags
+        
+    if driver.find_element_by_xpath("//i[@class='gtm-arrow-right-icon icon-button']"):
+        (driver.find_element_by_xpath("//i[@class='gtm-arrow-right-icon icon-button']")).click()
+        print('next page!')
+
+    # wait for tag row to be visible
+    tag_row = WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, 'tr.wd-tag-row')))
+    
+    for row in tag_row:
+        tag_name = row.find_element_by_css_selector('a.open-tag-button')
+        trigger = row.find_element_by_css_selector('a.small-trigger-chip')
+        tag_type = row.find_element_by_xpath(".//td[3]")
+        category, action, label = '', '', ''
+
+        # Check if the current tag is a GA tag
+        if tag_type.text == 'Google Analytics: Universal Analytics':
+            # if so, click into tag and get category, action, label text
+            tag_name.click()
+            # click into overlay
+            (WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'gtm-veditor-section-overlay')))).click()
+
+            # get category, action, label (input text fields 1,2,3)
+            category = (driver.find_element_by_xpath(".//gtm-vendor-template-text[1]//input")).get_attribute('value')
+            action = (driver.find_element_by_xpath(".//gtm-vendor-template-text[2]//input")).get_attribute('value')
+            label = (driver.find_element_by_xpath(".//gtm-vendor-template-text[3]//input")).get_attribute('value')
+
+            driver.find_element_by_class_name('gtm-sheet-header__close').click() # click back to tags view
+        
+        # write values for each column to csv file
+        f1.write(tag_name.text + ',' + category + ',' + action + ',' + label + ',' + trigger.text + '\n')
 
     f1.close()
-    driver.quit()
+    # driver.quit()
         
 # create csv files
 def create_csvs():
