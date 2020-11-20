@@ -1,8 +1,8 @@
 # GTM Web Scrape Tool
 
-This project was created only for educational proposes and to be used on a user's personal account.
+This project was created only for use on a user's personal account.
 Used Python and Selenium.
-**Important: Educational Purposes Only**
+
 
 ## Getting Started
 
