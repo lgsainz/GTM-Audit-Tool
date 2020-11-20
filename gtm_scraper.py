@@ -19,7 +19,7 @@ def site_login():
     try:
         driver.find_element_by_class_name('vxx8jf').click() # select workspace button
     except:
-        print('cool')
+        print('logging  in...')
     finally:
         driver.find_element_by_name('password').send_keys(config.password)
         driver.find_element_by_id('passwordNext').click()
@@ -61,7 +61,6 @@ def get_tags():
         
         # write values for each column to csv file
         f1.write(tag_name.text + ',' + category + ',' + action + ',' + label + ',' + trigger.text + '\n')
-        # time.sleep(0.5) # to prevent skipping tags
         
     f1.close()
     driver.quit()
