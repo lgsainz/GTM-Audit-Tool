@@ -36,8 +36,9 @@ def get_tags():
     # click into Tags from side menu
     driver.find_element_by_class_name('open-tag-list-button').click()
 
-    # get row within table (wait for it to be visible)
+    # get row within table
     for row in WebDriverWait(driver, 10).until(EC.visibility_of_all_elements_located((By.CSS_SELECTOR, 'tr.wd-tag-row'))):
+        # wait for element located to contain text
         WebDriverWait(row, 10).until(lambda driver: row.find_element_by_css_selector('a.open-tag-button').text.strip() != '')
         tag_name = row.find_element_by_css_selector('a.open-tag-button')
         trigger = row.find_element_by_css_selector('a.small-trigger-chip')
@@ -63,7 +64,7 @@ def get_tags():
         # time.sleep(0.5) # to prevent skipping tags
         
     f1.close()
-    # driver.quit()
+    driver.quit()
         
 # create csv files
 def create_csvs():
