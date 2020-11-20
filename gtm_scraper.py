@@ -36,7 +36,20 @@ def get_tags():
     # click into Tags from side menu
     driver.find_element_by_class_name('open-tag-list-button').click()
 
-    # get row within table
+    # get all tags
+    write_tags(f1)
+    # continue if pagination button is present
+    while len(driver.find_elements_by_xpath("//i[@class='gtm-arrow-right-icon icon-button']")) > 0:
+        (driver.find_element_by_xpath("//i[@class='gtm-arrow-right-icon icon-button']")).click()
+        # print('next page!')
+        write_tags(f1)
+        
+    f1.close()
+    driver.quit()
+
+
+def write_tags(filename):
+     # get row within table
     for row in WebDriverWait(driver, 10).until(EC.visibility_of_all_elements_located((By.CSS_SELECTOR, 'tr.wd-tag-row'))):
         # wait for element located to contain text
         WebDriverWait(row, 10).until(lambda driver: row.find_element_by_css_selector('a.open-tag-button').text.strip() != '')
@@ -50,7 +63,7 @@ def get_tags():
             # if so, click into tag and get category, action, label text
             tag_name.click()
             # click into overlay
-            (WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'gtm-veditor-section-overlay')))).click()
+            (WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.CLASS_NAME, 'gtm-veditor-section-overlay')))).click()
 
             # get category, action, label (input text fields 1,2,3)
             category = (driver.find_element_by_xpath(".//gtm-vendor-template-text[1]//input")).get_attribute('value')
@@ -64,7 +77,9 @@ def get_tags():
         
     f1.close()
     driver.quit()
+
         
+
 # create csv files
 def create_csvs():
     if not os.path.exists('csv'):
