@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -8,24 +7,27 @@ import os
 
 driver = webdriver.Chrome('/Users/Shared/chromedriver')
 
+# Google Tag Manager user/pass login
 def site_login():
     driver.get(config.url)
     driver.implicitly_wait(5) # sets the default wait time for the rest of the WebDriver obect's life
     driver.find_element_by_id('identifierId').send_keys(config.username)
     driver.find_element_by_id('identifierNext').click()
    
-   # check if current login screen is workspace selection or password
+    # check if current login screen is workspace selection or password field
     if len(driver.find_elements_by_class_name('vxx8jf')) > 0:
         driver.find_element_by_class_name('vxx8jf').click() # select workspace button
 
     driver.find_element_by_name('password').send_keys(config.password)
     driver.find_element_by_id('passwordNext').click()
 
+# Select account to audit
 def get_account():
     site_login()
     # click into the account you want to audit
     (WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.LINK_TEXT, config.account_to_audit)))).click()
 
+# Get all tags from container
 def get_tags():
     get_account()
     f1 = create_csvs()
@@ -33,7 +35,7 @@ def get_tags():
     # click into Tags from side menu
     driver.find_element_by_class_name('open-tag-list-button').click()
 
-    # get all tags
+    # (do-while) to get tags
     write_tags(f1)
     # continue if pagination button is present
     while len(driver.find_elements_by_xpath("//i[@class='gtm-arrow-right-icon icon-button']")) > 0:
