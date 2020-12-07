@@ -1,4 +1,4 @@
-# GTM Web Scrape Tool
+# GTM Audit Tool
 
 This project was created only for use on a user's personal account.
 Used Python and Selenium.
