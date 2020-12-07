@@ -44,7 +44,6 @@ def get_tags():
     f1.close()
     driver.quit()
 
-
 def write_tags(filename):
      # get row within table
     for row in WebDriverWait(driver, 10).until(EC.visibility_of_all_elements_located((By.CSS_SELECTOR, 'tr.wd-tag-row'))):
@@ -72,7 +71,6 @@ def write_tags(filename):
         # write values for each column to csv file
         filename.write(tag_name.text + ',' + category + ',' + action + ',' + label + ',' + trigger.text + '\n')
         
-
 # create csv files
 def create_csvs():
     if not os.path.exists('csv'):
@@ -83,5 +81,7 @@ def create_csvs():
     f1.write(headers)
     return f1
 
+
 # execute program
-get_tags()
+if __name__ == "__main__":
+    get_tags()
