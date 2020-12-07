@@ -20,9 +20,17 @@ What you need:
 
 How to get a development env running
 
+### Set up virtual environment in project directory
+
+```
+virtualenv venv
+```
+```
+source venv/bin/activate
+```
+
 ### Install Selenium and additional python libraries
 
-With:
 ```
 pip install -r requirements.txt
 ```
