@@ -3,6 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import config
+import sys
 import os
 
 driver = webdriver.Chrome('/Users/Shared/chromedriver')
@@ -11,15 +12,21 @@ driver = webdriver.Chrome('/Users/Shared/chromedriver')
 def site_login():
     driver.get(config.url)
     driver.implicitly_wait(5) # sets the default wait time for the rest of the WebDriver obect's life
-    driver.find_element_by_id('identifierId').send_keys(config.username)
-    driver.find_element_by_id('identifierNext').click()
-   
-    # check if current login screen is workspace selection or password field
-    if len(driver.find_elements_by_class_name('vxx8jf')) > 0:
-        driver.find_element_by_class_name('vxx8jf').click() # select workspace button
+    try:
+        driver.find_element_by_id('identifierId').send_keys(config.username)
+        driver.find_element_by_id('identifierNext').click()
+    
+        # check if current login screen is workspace selection or password field
+        if len(driver.find_elements_by_class_name('vxx8jf')) > 0:
+            driver.find_element_by_class_name('vxx8jf').click() # select workspace button
 
-    driver.find_element_by_name('password').send_keys(config.password)
-    driver.find_element_by_id('passwordNext').click()
+        driver.find_element_by_name('password').send_keys(config.password)
+        driver.find_element_by_id('passwordNext').click()
+    
+    except Exception:
+        print('There was an error while logging in.')
+        print(sys.exc_info()[0])
+        sys.exit()
 
 # Select account to audit
 def get_account():
