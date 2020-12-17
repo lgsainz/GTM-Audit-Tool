@@ -19,8 +19,6 @@ What you'll need:
 
 ## Setup
 
-How to get a development env running
-
 ### Create a virtual environment in project directory
 
 ```
